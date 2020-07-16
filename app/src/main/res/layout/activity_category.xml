@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".category.CategoryActivity">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/topbar"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:backgroundTint="@color/darkorange"
+        android:elevation="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:padding="5dp"
+                android:id="@+id/back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/back"
+                android:fontFamily="@font/opensans_regular"
+                android:text="CATEGORIES"
+                android:textColor="@color/colorWhite"
+                android:textSize="18sp" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <RelativeLayout
+        android:layout_below="@+id/topbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_image">
+
+        <LinearLayout
+            android:id="@+id/loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_light"
+                android:text="PLEASE WAIT"
+                android:textAlignment="center"
+                android:textColor="@color/darkorange"
+                android:textSize="18sp" />
+
+            <com.victor.loading.newton.NewtonCradleLoading
+                android:id="@+id/newton_cradle_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/top_text"
+                android:visibility="gone"
+                android:fontFamily="@font/opensans_regular"
+                android:textSize="18sp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="29dp"
+                android:textColor="@color/colorWhite"
+                android:text="PLEASE SELECT A SUBJECT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

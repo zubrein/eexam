@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="30dp"
+    android:background="@drawable/background2"
+    tools:context=".challengefriend.ui.AcceptChallengeActivity">
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:src="@drawable/logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_marginTop="40dp"
+        android:textColor="@color/darkorange"
+        android:fontFamily="@font/opensans_light"
+        android:textSize="18sp"
+        android:text="PLEASE INSERT CHALLENGE CODE"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rectangle_orange"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:backgroundTint="@android:color/transparent"
+            android:id="@+id/et_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="CHALLENGE CODE"
+            android:text="L7US0O"
+            android:textAlignment="center"
+            tools:layout_editor_absoluteX="44dp"
+            tools:layout_editor_absoluteY="220dp" />
+    </LinearLayout>
+
+
+
+    <Button
+        android:textColor="@color/colorWhite"
+        android:background="@color/orange"
+        android:layout_marginTop="50dp"
+        android:id="@+id/btn_enter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="enter"
+        tools:layout_editor_absoluteX="30dp"
+        tools:layout_editor_absoluteY="341dp" />
+
+</LinearLayout>

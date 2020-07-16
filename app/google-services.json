@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "119539048814",
+    "firebase_url": "https://eexam-aad94.firebaseio.com",
+    "project_id": "eexam-aad94",
+    "storage_bucket": "eexam-aad94.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:119539048814:android:0e232530c61e2b0834a17f",
+        "android_client_info": {
+          "package_name": "xit.zubrein.eexam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "119539048814-9j5qgqspplt7vdvntgrqk0nmhob3t63m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "xit.zubrein.eexam",
+            "certificate_hash": "f563df68cdaca31ad197494ef3af99b29e626eb3"
+          }
+        },
+        {
+          "client_id": "119539048814-t1ekh69su624r9cm1vodts7juukd4juv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwUYZsKt2eohkpO9HD7Lo4kegGvA3iMgc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "119539048814-t1ekh69su624r9cm1vodts7juukd4juv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

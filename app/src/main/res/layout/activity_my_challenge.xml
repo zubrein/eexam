@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_image"
+    tools:context=".challengefriend.ui.MyChallengeActivity">
+
+    <androidx.cardview.widget.CardView
+        android:elevation="5dp"
+        android:backgroundTint="@color/darkorange"
+        android:id="@+id/topbar"
+        android:layout_width="match_parent"
+        android:layout_height="70dp">
+
+        <RelativeLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/ic_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/colorWhite"
+                android:textSize="18sp"
+                android:layout_marginLeft="15dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/back"
+                android:text="MY CHALLENGES"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:id="@+id/create_challenge"
+                android:layout_toLeftOf="@+id/join_challenge"
+                android:gravity="center"
+                android:weightSum="10"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:src="@drawable/ic_add"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"/>
+                <TextView
+                    android:text="CREATE"
+                    android:textColor="@color/colorWhite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="20dp"
+                android:id="@+id/join_challenge"
+                android:layout_alignParentEnd="true"
+                android:gravity="center"
+                android:weightSum="10"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:padding="2dp"
+                    android:src="@drawable/ic_join"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"/>
+                <TextView
+                    android:text="JOIN"
+                    android:textColor="@color/colorWhite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.tabs.TabLayout
+        android:layout_below="@+id/topbar"
+        android:background="@color/darkorange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tabs"
+        app:tabTextColor="@color/colorWhite"
+        app:tabSelectedTextColor="@color/colorWhite"
+        app:tabIndicatorHeight="2dp"
+        app:tabIndicatorColor="@color/colorWhite"
+        app:tabMode="fixed">
+
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:layout_below="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/container">
+
+
+    </androidx.viewpager.widget.ViewPager>
+
+
+
+</RelativeLayout>

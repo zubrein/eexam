@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:elevation="3dp"
+    app:cardCornerRadius="5dp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:weightSum="12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:background="@color/darkorange"
+                android:padding="2dp"
+                android:textColor="@color/colorWhite"
+                android:id="@+id/position"
+                android:textSize="14sp"
+                android:text="1"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:fontFamily="@font/opensans_regular"
+                android:paddingLeft="10dp"
+                android:id="@+id/code"
+                android:textSize="18sp"
+                android:text="CODE : 8787G3"
+                android:layout_weight="8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:fontFamily="@font/opensans_regular"
+                android:id="@+id/view_all"
+                android:textStyle="bold"
+                android:textColor="@color/darkorange"
+                android:text="DETAILS"
+                android:gravity="center"
+                android:layout_weight="3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:weightSum="12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_marginTop="3dp"
+                android:text="12"
+                android:textSize="16sp"
+                android:gravity="start|center"
+                android:drawableLeft="@drawable/ic_person"
+                android:paddingLeft="10dp"
+                android:id="@+id/total_participant"
+                android:layout_weight="8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:gravity="center"
+                android:layout_weight="3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:weightSum="12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_marginTop="3dp"
+                android:gravity="start|center"
+                android:paddingLeft="10dp"
+                android:id="@+id/date"
+                android:drawableLeft="@drawable/ic_date"
+                android:layout_weight="8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:gravity="center"
+                android:layout_weight="3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
