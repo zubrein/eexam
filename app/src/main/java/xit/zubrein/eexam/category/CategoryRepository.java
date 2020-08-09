@@ -38,17 +38,16 @@ public class CategoryRepository {
         call.enqueue(new Callback<CategoryModel>() {
             @Override
             public void onResponse(Call<CategoryModel> call, Response<CategoryModel> response) {
-
-                Log.d(TAG, "onResponse: "+token);
                 if (response.isSuccessful()) {
                     CategoryModel model = response.body();
+                    Log.d(TAG, "onResponse: "+model.getStatus_code());
                     if (model.getStatus_code().equals("200")) {
                         data.setValue(model.subject_list);
                     }else{
                         Log.d(TAG, "onFailure: failed");
                     }
                 } else {
-                    Log.d(TAG, "onFailure: Server error" + token);
+                    Log.d(TAG, "onFailure: Server error"+response.message());
                 }
 
             }
@@ -61,5 +60,37 @@ public class CategoryRepository {
 
         return data;
     }
-    
+    public MutableLiveData<List<CategoryModel.subjects>> get_sebjects_create_challenge(final String token) {
+        if(data == null){
+            data = new MutableLiveData<>();
+        }
+        ApiClient apiClient = new ApiClient();
+        ApiInterface service = apiClient.createService(ApiInterface.class);
+        Call<CategoryModel> call = service.get_sebjects_create_challenge(token);
+        call.enqueue(new Callback<CategoryModel>() {
+            @Override
+            public void onResponse(Call<CategoryModel> call, Response<CategoryModel> response) {
+                if (response.isSuccessful()) {
+                    CategoryModel model = response.body();
+                    Log.d(TAG, "onResponse: "+model.getStatus_code());
+                    if (model.getStatus_code().equals("200")) {
+                        data.setValue(model.subject_list);
+                    }else{
+                        Log.d(TAG, "onFailure: failed");
+                    }
+                } else {
+                    Log.d(TAG, "onFailure: Server error");
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<CategoryModel> call, Throwable t) {
+                Log.d(TAG, "onFailure: No internet connection");
+            }
+        });
+
+        return data;
+    }
+
 }

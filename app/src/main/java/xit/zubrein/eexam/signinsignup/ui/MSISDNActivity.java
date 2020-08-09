@@ -40,11 +40,7 @@ public class MSISDNActivity extends AppCompatActivity {
         setContentView(R.layout.activity_m_s_i_s_d_n);
 
         sharedPreferences = getSharedPreferences("user",MODE_PRIVATE);
-        loginstatus = sharedPreferences.getBoolean("login",false);
-        if(loginstatus){
-            startActivity(new Intent(MSISDNActivity.this, HomeActivity.class));
-            finish();
-        }
+
 
         etMSISDN = findViewById(R.id.etMSISDN);
         btnSentOTP = findViewById(R.id.btnSentOTP);
@@ -97,6 +93,7 @@ public class MSISDNActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ModelSigninSignup> call, Throwable t) {
+                loadingBar.cancelDialog();
                 Toast.makeText(MSISDNActivity.this, "Network fail", Toast.LENGTH_SHORT).show();
             }
         });

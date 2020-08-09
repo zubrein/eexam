@@ -51,8 +51,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
                             android:backgroundTint="@android:color/transparent"
-                            android:hint=""
-                            android:text="Robi" />
+                            android:hint="" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -82,8 +81,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
                             android:backgroundTint="@android:color/transparent"
-                            android:hint=""
-                            android:text="robi3443@gmail.com" />
+                            android:hint="" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -111,7 +109,6 @@
                             android:id="@+id/etPasssword"
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
-                            android:text="123456"
                             android:inputType="textPassword"
                             android:backgroundTint="@android:color/transparent"
                             android:hint="" />
@@ -143,8 +140,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
                             android:backgroundTint="@android:color/transparent"
-                            android:hint=""
-                            android:text="Chittagong" />
+                            android:hint="" />
                     </LinearLayout>
 
                 </LinearLayout>

@@ -37,9 +37,10 @@ public class StatisticsActivity extends AppCompatActivity {
 
     private void setupViewPager() {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new FragmentOverall()); //index 0
-        adapter.addFragment(new FragmentRecent());
-        //index 2
+        adapter.addFragment(new FragmentRecent());//index 0
+        adapter.addFragment(new FragmentOverall()); //index 1
+
+
 
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.container);
@@ -48,8 +49,9 @@ public class StatisticsActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        tabLayout.getTabAt(0).setText("OVERALL");
-        tabLayout.getTabAt(1).setText("RECENT");
+        tabLayout.getTabAt(0).setText("RECENT");
+        tabLayout.getTabAt(1).setText("OVERALL");
+
 
 
     }

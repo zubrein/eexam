@@ -98,7 +98,6 @@ public class EmailSignupActivity extends AppCompatActivity implements AdapterVie
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
-                                                    loadingBar.cancelDialog();
                                                     register(etEmail.getText().toString(), etName.getText().toString(),
                                                             etDistrict.getText().toString(), currentStudy);
                                                 } else {
@@ -160,8 +159,9 @@ public class EmailSignupActivity extends AppCompatActivity implements AdapterVie
                         loadingBar.cancelDialog();
                         CustomToastHere customToastHere = new CustomToastHere();
                         customToastHere.showCustomToast(EmailSignupActivity.this, model.getStatus_code());
-
                     }
+                }else{
+                    Toast.makeText(EmailSignupActivity.this, "Please try again later.", Toast.LENGTH_SHORT).show();
                 }
             }
 

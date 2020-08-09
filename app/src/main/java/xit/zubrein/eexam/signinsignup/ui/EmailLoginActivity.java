@@ -45,6 +45,7 @@ public class EmailLoginActivity extends AppCompatActivity {
     LoadingBar loadingBar;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+    TextView forgot_password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,7 @@ public class EmailLoginActivity extends AppCompatActivity {
         btnSignUP = findViewById(R.id.btnSignUP);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
+        forgot_password = findViewById(R.id.forgot_password);
 
         btnSignIN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,14 +82,13 @@ public class EmailLoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-                                        loadingBar.cancelDialog();
                                         FirebaseUser user = mAuth.getCurrentUser();
-                                        if (user.isEmailVerified()) {
+//                                        if (user.isEmailVerified()) {
                                             get_id(email);
-                                        } else {
-                                            CustomToastHere customToastHere = new CustomToastHere();
-                                            customToastHere.showCustomToast(EmailLoginActivity.this, "Your account is not verified yet . Please check your email.");
-                                        }
+//                                        } else {
+//                                            CustomToastHere customToastHere = new CustomToastHere();
+//                                            customToastHere.showCustomToast(EmailLoginActivity.this, "Your account is not verified yet . Please check your email.");
+//                                        }
 
                                     } else {
                                         loadingBar.cancelDialog();
@@ -108,6 +109,12 @@ public class EmailLoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(EmailLoginActivity.this, EmailSignupActivity.class));
+            }
+        });
+        forgot_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    startActivity(new Intent(EmailLoginActivity.this,ForgotPasswordActivity.class));
             }
         });
 

@@ -8,6 +8,8 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.app.Activity;
@@ -40,7 +42,11 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import xit.zubrein.eexam.category.CategoryActivity;
 import xit.zubrein.eexam.challengefriend.ui.MyChallengeActivity;
+import xit.zubrein.eexam.feedback.FeedbackActivity;
+import xit.zubrein.eexam.profile.ProfileActivity;
+import xit.zubrein.eexam.signinsignup.model.ModelUser;
 import xit.zubrein.eexam.signinsignup.ui.MSISDNActivity;
+import xit.zubrein.eexam.signinsignup.viewmodel.ViewModelSigninSignup;
 import xit.zubrein.eexam.statistics.ui.StatisticsActivity;
 import xit.zubrein.eexam.utils.CustomToast;
 
@@ -105,7 +111,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_profile) {
+            startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
         } else if (id == R.id.nav_faq) {
+            Intent intent = new Intent(HomeActivity.this, WebActivity.class);
+            intent.putExtra("url","http://13.250.7.83/exam/faq");
+            startActivity(intent);
+        }else if (id == R.id.contact_us) {
+            Intent intent = new Intent(HomeActivity.this, FeedbackActivity.class);
+            startActivity(intent);
         }
         else if (id == R.id.nav_logout) {
             editor.clear();
@@ -127,7 +140,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         } else {
             ViewDialogExit viewDialogExit = new ViewDialogExit();
-            viewDialogExit.showDialog(HomeActivity.this, "", "আপনি কি বের হতে ইচ্ছুক ?");
+            viewDialogExit.showDialog(HomeActivity.this, "", "Do you want to exit ?");
         }
     }
 
@@ -194,6 +207,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         btn_challenge_friend = findViewById(R.id.btn_challenge_friend);
         btn_statistics = findViewById(R.id.btn_statistics);
 
+        get_user_data();
+
         push_notifcation();
     }
 
@@ -243,4 +258,21 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
     }
+
+    void get_user_data(){
+        ViewModelSigninSignup viewModel = new ViewModelProvider(HomeActivity.this).get(ViewModelSigninSignup.class);
+        viewModel.get_user_data().observe(HomeActivity.this, new Observer<ModelUser>() {
+            @Override
+            public void onChanged(ModelUser user) {
+                editor.putString("name",user.getName());
+                editor.putString("email",user.getEmail());
+                editor.putString("city",user.getCity());
+                editor.putString("msisdn",user.getMsisdn());
+                editor.putString("current_study",user.getCurrent_study());
+                editor.apply();
+
+            }
+        });
+    }
+
 }

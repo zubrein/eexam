@@ -64,7 +64,7 @@ public class FragmentOverall extends Fragment {
             webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
         webView.setWebViewClient(new Callback());
-        webView.loadUrl("http://www.quiz-hunt.com/exam/api/overall_stat/"+user_id); //add your test web/page address here
+        webView.loadUrl("http://13.250.7.83/exam/api/overall_stat/"+user_id); //add your test web/page address here
         webView.setWebViewClient(new WebViewClient(){
 
             @Override

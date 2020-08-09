@@ -24,6 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cbr.gradienttextview.GradientTextView;
+import com.github.ybq.android.spinkit.SpinKitView;
+import com.github.ybq.android.spinkit.style.FoldingCube;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -49,7 +51,7 @@ public class QuizActivity extends AppCompatActivity {
     ProgressBar progressBar;
     private CountDownTimer countDownTimer;
     private long timeLeftInMillis;
-    private static final long COUNTDOWN_IN_MILLIS = 10000;
+    private static long COUNTDOWN_IN_MILLIS = 15000;
     int questionCount = 0;
     List<Questions> quesList;
     int score = 0;
@@ -66,12 +68,13 @@ public class QuizActivity extends AppCompatActivity {
     CardView opt1_blue, opt1_red, opt1_green, opt2_blue, opt2_red, opt2_green, opt3_blue, opt3_red, opt3_green, opt4_blue, opt4_red, opt4_green;
     private GradientTextView textViewCountDown;
     private QuestionsViewModel questionsViewModel;
-    private RelativeLayout relativeLayout, heade;
+    private RelativeLayout relativeLayout, heade,progressBarLayout;
 
     private boolean answered = false;
     SharedPreferences sharedPreferences;
     String token, user_id, quiz_type, code = "", subject;
-    LoadingBar loadingBar;
+//    LoadingBar loadingBar;
+    SpinKitView spin_kit;
     List<AnswerSetModel> list = new ArrayList<AnswerSetModel>();
 
     @Override
@@ -79,11 +82,12 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        loadingBar = new LoadingBar();
-        loadingBar.showDialog(QuizActivity.this);
+//        loadingBar = new LoadingBar();
+//        loadingBar.showDialog(QuizActivity.this);
 
         subject = getIntent().getStringExtra("subject_id");
         quiz_type = getIntent().getStringExtra("quiz_type");
+
         if (quiz_type.equals("challenge")) {
             code = getIntent().getStringExtra("code");
         }
@@ -108,6 +112,10 @@ public class QuizActivity extends AppCompatActivity {
         opt4_green = findViewById(R.id.opt4_green);
         opt4_blue = findViewById(R.id.opt4_blue);
         heade = findViewById(R.id.heade);
+        progressBarLayout = findViewById(R.id.progressBarLayout);
+        progressBar = (ProgressBar) findViewById(R.id.spin_kit);
+        FoldingCube foldingCube = new FoldingCube();
+        progressBar.setIndeterminateDrawable(foldingCube);
 
 
         relativeLayout = (RelativeLayout) findViewById(R.id.profileLoadingScreen);
@@ -249,10 +257,11 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     public void takeAction() {
-//        progressBarLayout.setVisibility(View.GONE);
-        loadingBar.cancelDialog();
+        progressBarLayout.setVisibility(View.GONE);
+//        loadingBar.cancelDialog();
         heade.setVisibility(View.VISIBLE);
         relativeLayout.setVisibility(View.VISIBLE);
+        COUNTDOWN_IN_MILLIS = sharedPreferences.getLong("quiz_time", (long) 0.0) * 1000;
         timeLeftInMillis = COUNTDOWN_IN_MILLIS;
         startCountDown();
         currentQ = quesList.get(qid);
@@ -389,6 +398,7 @@ public class QuizActivity extends AppCompatActivity {
                 visibility();
                 button_enabled();
                 if (qid < questionCount) {
+                    COUNTDOWN_IN_MILLIS = sharedPreferences.getLong("quiz_time", (long) 0.0) * 1000;
                     timeLeftInMillis = COUNTDOWN_IN_MILLIS;
                     startCountDown();
                     currentQ = quesList.get(qid);

@@ -7,26 +7,40 @@
     android:background="@drawable/background_image"
     tools:context="xit.zubrein.eexam.quizsection.QuizActivity">
 
-    <!--<RelativeLayout-->
-    <!--android:visibility="visible"-->
-    <!--android:id="@+id/progressBarLayout"-->
-    <!--android:background="@drawable/background"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent">-->
+    <RelativeLayout
+    android:visibility="visible"
+    android:id="@+id/progressBarLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <!--<com.github.ybq.android.spinkit.SpinKitView-->
-    <!--android:layout_centerHorizontal="true"-->
-    <!--android:layout_marginBottom="45dp"-->
-    <!--android:layout_centerVertical="true"-->
-    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-    <!--android:id="@+id/spin_kit"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center"-->
-    <!--app:SpinKit_Color="@color/colorWhite" />-->
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:layout_marginBottom="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Please wait..."
+                android:textSize="18sp"
+                android:textColor="@color/colorWhite"/>
+
+            <com.github.ybq.android.spinkit.SpinKitView
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="45dp"
+                android:layout_centerVertical="true"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/spin_kit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:SpinKit_Color="@color/colorWhite" />
+
+        </LinearLayout>
 
 
-    <!--</RelativeLayout>-->
+    </RelativeLayout>
 
 
     <RelativeLayout

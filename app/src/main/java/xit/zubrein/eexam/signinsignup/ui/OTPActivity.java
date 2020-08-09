@@ -66,39 +66,6 @@ public class OTPActivity extends AppCompatActivity {
 
                     check_otp();
 
-//                    final LoadingBar loadingBar = new LoadingBar();
-//                    loadingBar.showDialog(OTPActivity.this);
-//                    viewModel.confirmOTPResponse(msisdn, otp).observe(OTPActivity.this, new Observer<ModelSigninSignup>() {
-//                        @Override
-//                        public void onChanged(ModelSigninSignup s) {
-//                            viewModel.confirmOTPResponse(msisdn,otp).removeObservers(OTPActivity.this);
-//                            Log.d("OTPActivity", "onChanged: " + s);
-//                            if (s.getStatus_code().equals("200")) {
-//                                if(s.getRegistered().equals("no")){
-//                                    loadingBar.cancelDialog();
-//                                    finish();
-//                                    Intent intent = new Intent(OTPActivity.this,FormActivity.class);
-//                                    intent.putExtra("msisdn",msisdn);
-//                                    startActivity(intent);
-//                                }else{
-//                                    loadingBar.cancelDialog();
-//                                    editor.putString("msisdn",msisdn);
-//                                    editor.putBoolean("login",true);
-//                                    editor.putString("token","Bearer "+s.getToken());
-//                                    editor.putString("user_id",s.getUser_id());
-//                                    editor.apply();
-//                                    startActivity(new Intent(OTPActivity.this, HomeActivity.class));
-//                                    finish();
-//                                }
-//                            } else {
-//                                loadingBar.cancelDialog();
-//                                textU.setVisibility(View.VISIBLE);
-//                                textU.setText("X incorrect OTP");
-//                                textU.setTextColor(Color.RED);
-//                                pinView.setLineColor(Color.RED);
-//                            }
-//                        }
-//                    });
                 } else {
                     Toast.makeText(OTPActivity.this, "Please enter a valid otp", Toast.LENGTH_SHORT).show();
                 }
@@ -136,7 +103,6 @@ public class OTPActivity extends AppCompatActivity {
                             startActivity(intent);
                         }else{
                             loadingBar.cancelDialog();
-                            editor.putString("msisdn",msisdn);
                             editor.putBoolean("login",true);
                             editor.putString("token","Bearer "+model.getToken());
                             editor.putString("user_id",model.getUser_id());
@@ -151,11 +117,15 @@ public class OTPActivity extends AppCompatActivity {
                         textU.setTextColor(Color.RED);
                         pinView.setLineColor(Color.RED);
                     }
+                }else{
+                    loadingBar.cancelDialog();
                 }
             }
 
             @Override
             public void onFailure(Call<ModelSigninSignup> call, Throwable t) {
+                loadingBar.cancelDialog();
+                Toast.makeText(OTPActivity.this, "server error", Toast.LENGTH_SHORT).show();
             }
         });
     }

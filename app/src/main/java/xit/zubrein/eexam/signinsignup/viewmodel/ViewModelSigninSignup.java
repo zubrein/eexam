@@ -1,6 +1,8 @@
 package xit.zubrein.eexam.signinsignup.viewmodel;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -9,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import xit.zubrein.eexam.signinsignup.model.ModelRegister;
 import xit.zubrein.eexam.signinsignup.model.ModelSigninSignup;
+import xit.zubrein.eexam.signinsignup.model.ModelUser;
 import xit.zubrein.eexam.signinsignup.repository.SigninSignupRepository;
 
 public class ViewModelSigninSignup extends AndroidViewModel {
@@ -16,19 +19,24 @@ public class ViewModelSigninSignup extends AndroidViewModel {
     SigninSignupRepository signinSignupRepository;
     private MutableLiveData<String> response;
     private MutableLiveData<ModelSigninSignup> modelSigninSignupMutableLiveData;
+    private MutableLiveData<ModelUser> modelUserMutableLiveData;
     private MutableLiveData<ModelRegister> modelRegisterMutableLiveData;
-
+    SharedPreferences sharedPreferences;
+    String user_id,token;
 
     public ViewModelSigninSignup(@NonNull Application application) {
         super(application);
         signinSignupRepository = new SigninSignupRepository(application);
+        sharedPreferences = application.getSharedPreferences("user", Context.MODE_PRIVATE);
+        user_id = sharedPreferences.getString("user_id","");
+        token = sharedPreferences.getString("token","");
     }
 
-    public LiveData<ModelSigninSignup> sendOTPResponse(String msisdn) {
+    public LiveData<ModelUser> get_user_data() {
 
-        modelSigninSignupMutableLiveData = signinSignupRepository.sendOTP(msisdn);
+        modelUserMutableLiveData = signinSignupRepository.getUserData(token,user_id);
 
-        return modelSigninSignupMutableLiveData;
+        return modelUserMutableLiveData;
     }
 
     public LiveData<ModelSigninSignup> confirmOTPResponse(String msisdn, String otp) {

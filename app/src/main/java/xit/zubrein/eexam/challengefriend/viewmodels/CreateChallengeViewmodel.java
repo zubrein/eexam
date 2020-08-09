@@ -40,6 +40,15 @@ public class CreateChallengeViewmodel extends AndroidViewModel {
         return subjectsMutableLiveData;
     }
 
+    public LiveData<List<CategoryModel.subjects>> get_sebjects_create_challenge() {
+
+        subjectsMutableLiveData = categoryRepository.get_sebjects_create_challenge(token);
+
+        return subjectsMutableLiveData;
+    }
+
+
+
     public LiveData<String> get_code(CreateChallengeModel model) {
         data = new MutableLiveData<>();
         data = createChallengeRepository.get_code(token, model);

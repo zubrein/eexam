@@ -30,17 +30,18 @@ public class CategoryActivity extends AppCompatActivity {
     LinearLayout loading;
     NewtonCradleLoading newtonCradleLoading;
     TextView top_text;
-    ImageView back;
+    ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
 
-        back = findViewById(R.id.back);
+
         loading = findViewById(R.id.loading);
         loading.setVisibility(View.VISIBLE);
 
+        ImageView back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -12,7 +12,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
  * Created by zubrein on 7/15/19.
  */
 
-@Database(entities = {Questions.class}, version = 1)
+@Database(entities = {Questions.class}, version = 1, exportSchema = false)
 public abstract class QuestionsRoomDatabase extends RoomDatabase {
 
     public abstract QuestionsDao wordDao();

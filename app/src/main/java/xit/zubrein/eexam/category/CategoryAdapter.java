@@ -20,6 +20,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import android.os.Handler;
+import java.util.logging.LogRecord;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,11 +31,14 @@ import xit.zubrein.eexam.charging.ModelCharging;
 import xit.zubrein.eexam.charging.PaymentActivity;
 import xit.zubrein.eexam.network.ApiClient;
 import xit.zubrein.eexam.network.ApiInterface;
+import xit.zubrein.eexam.profile.ProfileActivity;
 import xit.zubrein.eexam.quizsection.QuizActivity;
 import xit.zubrein.eexam.R;
 import xit.zubrein.eexam.quizsection.model.QuestionsModel;
 import xit.zubrein.eexam.utils.CustomToast;
 import xit.zubrein.eexam.utils.LoadingBar;
+import xit.zubrein.eexam.utils.LoadingBarCharge;
+import xit.zubrein.eexam.utils.LoadingBarForFreeExam;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -41,7 +46,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
     private List<CategoryModel.subjects> subjectList;
     Context c;
-    String user_id = "", token = "";
+    String user_id = "", token = "",otb_message="",subscribe_message="";
     SharedPreferences sharedPreferences;
     LoadingBar loadingBar;
     Activity activity;
@@ -67,6 +72,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         sharedPreferences = c.getSharedPreferences("user", Context.MODE_PRIVATE);
         user_id = sharedPreferences.getString("user_id", "");
         token = sharedPreferences.getString("token", "");
+        otb_message = sharedPreferences.getString("otb_message", "");
+        subscribe_message = sharedPreferences.getString("subscribe_message", "");
         loadingBar = new LoadingBar();
         chargingRepository = new ChargingRepository(activity);
 
@@ -89,8 +96,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         holder.parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkAvailibity(currentitem.getId());
-                Log.d(TAG, "checkAvailibity: "+user_id);
+                checkAvailabity(currentitem.getId());
             }
         });
 
@@ -99,81 +105,110 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     @Override
     public int getItemCount() {
         return subjectList.size();
-
     }
 
-    public void checkAvailibity(final String subject) {
-
+    public void checkAvailabity(final String subject) {
         loadingBar.showDialog(activity);
         ApiClient apiClient = new ApiClient();
         ApiInterface service = apiClient.createService(ApiInterface.class);
-        Call<QuestionsModel> call = service.getQuestions(token, user_id, subject);
-        call.enqueue(new Callback<QuestionsModel>() {
+        Call<ModelAvailability> call = service.check_availability(token, user_id);
+        call.enqueue(new Callback<ModelAvailability>() {
             @Override
-            public void onResponse(Call<QuestionsModel> call, Response<QuestionsModel> response) {
+            public void onResponse(Call<ModelAvailability> call, Response<ModelAvailability> response) {
                 if (response.isSuccessful()) {
                     loadingBar.cancelDialog();
-                    QuestionsModel questionsModel = response.body();
-                    if (questionsModel.isAvailability()) {
-                        ViewDialog viewDialog = new ViewDialog();
-                        viewDialog.showDialog(activity, "Your next exam is totally free. Do you want to proceed ?", "available", subject,questionsModel.getStatus_code());
-                    } else {
-                        ViewDialog viewDialog = new ViewDialog();
-                        viewDialog.showDialog(activity, "You have reached your free limit. Next exam will cost 2tk + vat + sd. Do you want to proceed ?", "not_available", subject,questionsModel.getStatus_code());
+                    ModelAvailability modelAvailability = response.body();
+                    if (modelAvailability.getAvailability().equals("true")) {
+                        final LoadingBarForFreeExam loadingBarForFreeExam = new LoadingBarForFreeExam();
+                        loadingBarForFreeExam.showDialog(activity);
+                        Handler handler = new Handler() ;
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                loadingBarForFreeExam.cancelDialog();
+                                Intent intent = new Intent(c, QuizActivity.class);
+                                intent.putExtra("subject_id", subject);
+                                intent.putExtra("quiz_type", "regular");
+                                c.startActivity(intent);
+                            }
+                        }, 3000);
+                    } else if (modelAvailability.getAvailability().equals("false")) {
+                        if (modelAvailability.getMsisdn().equals("false")) {
+                            DialogNoMsisdn dialogNoMsisdn = new DialogNoMsisdn();
+                            dialogNoMsisdn.showDialog(activity, subject);
+                        } else if (modelAvailability.getMsisdn().equals("true")) {
+                            if (modelAvailability.getSub_status_paid().equals("true")) {
+                                DialogPaid dialogPaid = new DialogPaid();
+                                dialogPaid.showDialog(activity, subject, "subscribed");
+                            } else if (modelAvailability.getSub_status_paid().equals("false")) {
+                                DialogPaid dialogPaid = new DialogPaid();
+                                dialogPaid.showDialog(activity, subject, "not_subscribed");
+                            }else if (modelAvailability.getSub_status_paid().equals("pending_charge")) {
+                                CustomToast.showCustomToast(activity,"You have previous dues. Please recharge first.");
+                            }
+
+
+                        }
+
                     }
 
+
                 } else {
+                    loadingBar.cancelDialog();
                     Toast.makeText(c, "no response", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<QuestionsModel> call, Throwable t) {
-
+            public void onFailure(Call<ModelAvailability> call, Throwable t) {
+                loadingBar.cancelDialog();
+                Toast.makeText(c, "No Internet connection", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    public class ViewDialog {
-        public void showDialog(Activity activity, String messages, final String type, final String subject, final int code) {
+    public class DialogPaid {
+        public void showDialog(Activity activity, final String subject, String type) {
             final Dialog dialog = new Dialog(activity);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setCancelable(false);
-            dialog.setContentView(R.layout.custom_dialog);
+            dialog.setContentView(R.layout.subscription_dialog);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            TextView subscribe = dialog.findViewById(R.id.subscribe);
+            TextView auto_renewel_text = dialog.findViewById(R.id.auto_renewel_text);
+            TextView otb = dialog.findViewById(R.id.otb);
+            TextView cancel = dialog.findViewById(R.id.cancel);
             TextView header = dialog.findViewById(R.id.dialog_message_header);
             header.setText("");
             TextView message = dialog.findViewById(R.id.dialog_message);
-            message.setText(messages);
-            FrameLayout mDialogNo = dialog.findViewById(R.id.frmNo);
-            mDialogNo.setOnClickListener(new View.OnClickListener() {
+            if (type.equals("subscribed")) {
+                message.setText(otb_message);
+                subscribe.setVisibility(View.INVISIBLE);
+                auto_renewel_text.setVisibility(View.INVISIBLE);
+
+            } else if (type.equals("not_subscribed")) {
+                message.setText(subscribe_message);
+            }
+
+            cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
+                public void onClick(View view) {
+                    dialog.cancel();
+                }
+            });
+            subscribe.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.cancel();
+                    do_subscription(subject);
                 }
             });
 
-            FrameLayout mDialogOk = dialog.findViewById(R.id.frmOk);
-            mDialogOk.setOnClickListener(new View.OnClickListener() {
+            otb.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View view) {
                     dialog.cancel();
-                    if (type.equals("available")) {
-                        Intent intent = new Intent(c, QuizActivity.class);
-                        intent.putExtra("subject_id", subject);
-                        intent.putExtra("quiz_type", "regular");
-                        c.startActivity(intent);
-                    } else if (type.equals("not_available")) {
-                        if (code == 513){
-                            c.startActivity(new Intent(c, PaymentActivity.class));
-                        }else{
-                            check_sub(subject);
-                        }
-
-                    } else if (type.equals("subscribe")) {
-                        do_charge(subject);
-                    }
-
+                   do_charge(subject);
                 }
             });
 
@@ -181,43 +216,54 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         }
     }
 
-    public void check_sub(final String subject) {
-        loadingBar = new LoadingBar();
-        loadingBar.showDialog(activity);
+    public class DialogNoMsisdn {
+        public void showDialog(Activity activity, final String subject) {
+            final Dialog dialog = new Dialog(activity);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.subscription_dialog);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            TextView header = dialog.findViewById(R.id.dialog_message_header);
+            header.setText("");
+            TextView message = dialog.findViewById(R.id.dialog_message);
+            message.setText("Your have reached your free limit . Please add your ROBI/AIRTEL number for subscribe or buy 5 exams by taping OTB(One Time Buy)");
+            TextView subscribe = dialog.findViewById(R.id.subscribe);
+            TextView otb = dialog.findViewById(R.id.otb);
+            TextView cancel = dialog.findViewById(R.id.cancel);
+            otb.setText("OTB");
+            subscribe.setText("Add Number");
 
-        ApiClient apiClient = new ApiClient();
-        ApiInterface service = apiClient.createService(ApiInterface.class);
-        Call<ModelCharging> call = service.check_subscription(token, user_id);
-        call.enqueue(new Callback<ModelCharging>() {
-            @Override
-            public void onResponse(Call<ModelCharging> call, Response<ModelCharging> response) {
-                if (response.isSuccessful()) {
-                    ModelCharging model = response.body();
-                    String status = model.getSubscription_status();
-                    if (status.equals("REGISTERED")) {
-                        loadingBar.cancelDialog();
-                        do_charge(subject);
-                    } else {
-                        loadingBar.cancelDialog();
-                        ViewDialog viewDialog = new ViewDialog();
-                        viewDialog.showDialog(activity, "You aren't subscribed. Do you want to subscribe ? (Subscription is totally free)", "subscribe", subject,200);
-                    }
-
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.cancel();
                 }
+            });
+            subscribe.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    c.startActivity(new Intent(c, ProfileActivity.class));
+                }
+            });
+            otb.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(c, PaymentActivity.class);
+                    intent.putExtra("subject_id", subject);
+                    intent.putExtra("quiz_type", "regular");
+                    c.startActivity(intent);
+                }
+            });
 
-            }
-
-            @Override
-            public void onFailure(Call<ModelCharging> call, Throwable t) {
-            }
-        });
-
-
+            dialog.show();
+        }
     }
 
     public void do_charge(final String subject) {
-        loadingBar = new LoadingBar();
+
+        final LoadingBarCharge loadingBar = new LoadingBarCharge();
         loadingBar.showDialog(activity);
+
         ApiClient apiClient = new ApiClient();
         ApiInterface service = apiClient.createService(ApiInterface.class);
         Call<ModelCharging> call = service.charge(token, user_id);
@@ -234,17 +280,66 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                         intent.putExtra("subject_id", subject);
                         intent.putExtra("quiz_type", "regular");
                         c.startActivity(intent);
+
                     } else {
                         loadingBar.cancelDialog();
-                        CustomToast.showCustomToast(activity, "You don't have sufficient balance");
+                        CustomToast.showCustomToast(activity, "Charging failed.Please recharge or try again later");
                     }
 
+                } else {
+                    loadingBar.cancelDialog();
+                    Toast.makeText(c, "Server error", Toast.LENGTH_SHORT).show();
                 }
 
             }
 
             @Override
             public void onFailure(Call<ModelCharging> call, Throwable t) {
+                loadingBar.cancelDialog();
+                Toast.makeText(c, "No internet connection", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+    public void do_subscription(final String subject) {
+
+        final LoadingBarCharge loadingBar = new LoadingBarCharge();
+        loadingBar.showDialog(activity);
+
+        ApiClient apiClient = new ApiClient();
+        ApiInterface service = apiClient.createService(ApiInterface.class);
+        Call<ModelCharging> call = service.do_subscription(token, user_id);
+        call.enqueue(new Callback<ModelCharging>() {
+            @Override
+            public void onResponse(Call<ModelCharging> call, Response<ModelCharging> response) {
+                if (response.isSuccessful()) {
+                    ModelCharging model = response.body();
+                    String data = model.getStatus_code();
+
+                    if (data.equals("200")) {
+                        loadingBar.cancelDialog();
+                        Intent intent = new Intent(c, QuizActivity.class);
+                        intent.putExtra("subject_id", subject);
+                        intent.putExtra("quiz_type", "regular");
+                        c.startActivity(intent);
+
+                    } else {
+                        loadingBar.cancelDialog();
+                        CustomToast.showCustomToast(activity, "Subscription failed");
+                    }
+
+                } else {
+                    loadingBar.cancelDialog();
+                    Toast.makeText(c, "Server error", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ModelCharging> call, Throwable t) {
+                loadingBar.cancelDialog();
+                Toast.makeText(c, "No internet connection", Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -35,13 +35,13 @@
                 <TextView
                     android:layout_marginTop="10dp"
                     android:id="@+id/dialog_message"
+                    android:fontFamily="@font/opensans_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
                     android:gravity="center"
-                    android:text=""
                     android:textSize="16dp" />
 
 

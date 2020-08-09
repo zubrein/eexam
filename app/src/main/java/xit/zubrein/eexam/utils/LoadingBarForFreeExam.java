@@ -1,0 +1,39 @@
+package xit.zubrein.eexam.utils;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
+import android.view.Window;
+
+import com.victor.loading.newton.NewtonCradleLoading;
+
+import xit.zubrein.eexam.R;
+
+
+public class LoadingBarForFreeExam {
+    boolean active = false;
+    public Dialog dialog;
+    NewtonCradleLoading newtonCradleLoading;
+    public void showDialog(Activity activity) {
+        dialog = new Dialog(activity);
+        dialog.setCancelable(false);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.loading_dialog_free_exam);
+        newtonCradleLoading = dialog.findViewById(R.id.newton_cradle_loading);
+        newtonCradleLoading.setLoadingColor(R.color.orange);
+        newtonCradleLoading.start();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.show();
+    }
+    public void cancelDialog() {
+        dialog.dismiss();
+    }
+    public boolean isActive(){
+        if(dialog.isShowing()){
+            active = true;
+        }else{
+            active = false;
+        }
+        return active;
+    }
+}

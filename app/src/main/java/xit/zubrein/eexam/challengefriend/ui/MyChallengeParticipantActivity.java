@@ -60,6 +60,7 @@ public class MyChallengeParticipantActivity extends AppCompatActivity {
     String type;
     TextView delete;
     SharedPreferences sharedPreferences;
+    String app_link ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,7 @@ public class MyChallengeParticipantActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("user",MODE_PRIVATE);
         token = sharedPreferences.getString("token","");
+        app_link = sharedPreferences.getString("app_link","");
 
         share_code = findViewById(R.id.share_code);
         copy_code = findViewById(R.id.copy_code);
@@ -118,9 +120,11 @@ public class MyChallengeParticipantActivity extends AppCompatActivity {
                 Intent intent;
                 intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_SUBJECT, "E-Exam");
-                String sAux = "\nAccept my challenge\n"+"\nCode: "+code;
-                sAux = sAux+ "\n\nE-Exam\n";
+                intent.putExtra(Intent.EXTRA_SUBJECT, "E-EXAM");
+                String sAux = "\nYou are invited on my e-exam challenge\n"+"\nCode: "+code;
+                sAux = sAux+ "\nLet's see how much you score !! \n";
+                sAux = sAux+ "\n\nDownload E-EXAM app on Google Playstore\n";
+                sAux = sAux+ app_link+"\n";
                 intent.putExtra(Intent.EXTRA_TEXT, sAux);
                 startActivity(Intent.createChooser(intent, "Share"));
             }
@@ -132,9 +136,11 @@ public class MyChallengeParticipantActivity extends AppCompatActivity {
                 Intent intent;
                 intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_SUBJECT, "E-Exam");
-                String sAux = "\nAccept my challenge\n"+"\nCode: "+code;
-                sAux = sAux+ "\n\nE-Exam\n";
+                intent.putExtra(Intent.EXTRA_SUBJECT, "E-EXAM");
+                String sAux = "\nYou are invited on my e-exam challenge\n"+"\nCode: "+code;
+                sAux = sAux+ "\nLet's see how much you score !! \n";
+                sAux = sAux+ "\n\nDownload E-EXAM app on Google Playstore\n";
+                sAux = sAux+ app_link+"\n";
                 intent.putExtra(Intent.EXTRA_TEXT, sAux);
                 startActivity(Intent.createChooser(intent, "Share"));
             }

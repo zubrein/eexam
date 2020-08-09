@@ -1,6 +1,8 @@
 package xit.zubrein.eexam.network;
 
 
+import android.content.SharedPreferences;
+
 import androidx.multidex.BuildConfig;
 
 import java.util.concurrent.TimeUnit;
@@ -18,7 +20,7 @@ public class ApiClient {
     public static <S> S createService(Class<S> serviceClass) {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("http://www.quiz-hunt.com/exam/api/");
+                .baseUrl("http://13.250.7.83/exam/api/");
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
                 .readTimeout(90, TimeUnit.SECONDS)

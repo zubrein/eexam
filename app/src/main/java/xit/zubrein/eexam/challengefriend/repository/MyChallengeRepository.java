@@ -44,8 +44,10 @@ public class MyChallengeRepository {
                     if(model.getStatus_code().equals("200")){
                         list.setValue(model.getMyChallengeList());
                     }else{
-                        Log.d(TAG, "onResponse: Server error");
+                        list.setValue(null);
                     }
+                }else{
+                    Log.d(TAG, "onResponse: Server error");
                 }
             }
 
@@ -75,8 +77,10 @@ public class MyChallengeRepository {
                     if(model.getStatus_code().equals("200")){
                         list2.setValue(model.getAcceptedChallengeList());
                     }else{
-                        Log.d(TAG, "onResponse: Server error");
+                        list2.setValue(null);
                     }
+                }else{
+                    Log.d(TAG, "onResponse: Server error");
                 }
             }
 

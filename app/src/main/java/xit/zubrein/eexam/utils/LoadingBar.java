@@ -11,6 +11,7 @@ import xit.zubrein.eexam.R;
 
 
 public class LoadingBar {
+    boolean active = false;
     public Dialog dialog;
     NewtonCradleLoading newtonCradleLoading;
     public void showDialog(Activity activity) {
@@ -25,5 +26,13 @@ public class LoadingBar {
     }
     public void cancelDialog() {
         dialog.dismiss();
+    }
+    public boolean isActive(){
+        if(dialog.isShowing()){
+            active = true;
+        }else{
+            active = false;
+        }
+        return active;
     }
 }

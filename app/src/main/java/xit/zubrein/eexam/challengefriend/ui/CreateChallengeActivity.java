@@ -55,6 +55,7 @@ public class CreateChallengeActivity extends AppCompatActivity {
     String token = "", user_id = "";
     SharedPreferences sharedPreferences;
     ImageView back;
+    String app_link ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,11 +75,12 @@ public class CreateChallengeActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         user_id = sharedPreferences.getString("user_id", "");
         token = sharedPreferences.getString("token", "");
+        app_link = sharedPreferences.getString("app_link", "");
 
         viewmodel = new ViewModelProvider(CreateChallengeActivity.this).get(CreateChallengeViewmodel.class);
 
 
-        viewmodel.getSubjects().observe(CreateChallengeActivity.this, new Observer<List<CategoryModel.subjects>>() {
+        viewmodel.get_sebjects_create_challenge().observe(CreateChallengeActivity.this, new Observer<List<CategoryModel.subjects>>() {
             @Override
             public void onChanged(List<CategoryModel.subjects> subjects) {
 
@@ -129,14 +131,6 @@ public class CreateChallengeActivity extends AppCompatActivity {
 
     public void send_data() {
         final CreateChallengeModel model = new CreateChallengeModel(user_id, createChallengeSubjectModelList);
-//        viewmodel2 = new ViewModelProvider(CreateChallengeActivity.this).get(CreateChallengeViewmodel.class);
-//        viewmodel.get_code(model).observe(CreateChallengeActivity.this, new Observer<String>() {
-//            @Override
-//            public void onChanged(String s) {
-//                viewmodel.get_code(model).removeObservers(CreateChallengeActivity.this);
-
-//            }
-//        });
         final LoadingBar loadingBar = new LoadingBar() ;
         loadingBar.showDialog(CreateChallengeActivity.this);
 
@@ -192,9 +186,11 @@ public class CreateChallengeActivity extends AppCompatActivity {
                     Intent intent;
                     intent = new Intent(Intent.ACTION_SEND);
                     intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_SUBJECT, "FCM");
-                    String sAux = "\nAccept my challenge\n"+"\nCode: "+code;
-                    sAux = sAux+ "\n\nE-Exam\n";
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "E-EXAM");
+                    String sAux = "\nYou are invited on my e-exam challenge\n"+"\nCode: "+code;
+                    sAux = sAux+ "\nLet's see how much you score !! \n";
+                    sAux = sAux+ "\n\nDownload E-EXAM app on Google Playstore\n";
+                    sAux = sAux+ app_link+"\n";
                     intent.putExtra(Intent.EXTRA_TEXT, sAux);
                     startActivity(Intent.createChooser(intent, "Share"));
                 }

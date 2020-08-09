@@ -1,12 +1,15 @@
 package xit.zubrein.eexam.challengefriend.ui.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -22,6 +25,7 @@ import java.util.List;
 import xit.zubrein.eexam.R;
 import xit.zubrein.eexam.challengefriend.adapter.MyChallengeAdapter;
 import xit.zubrein.eexam.challengefriend.model.MyChallengeModel;
+import xit.zubrein.eexam.challengefriend.ui.CreateChallengeActivity;
 import xit.zubrein.eexam.challengefriend.ui.MyChallengeActivity;
 import xit.zubrein.eexam.challengefriend.viewmodels.MyChallengeViewModel;
 
@@ -32,21 +36,35 @@ public class FragmentMyChallenge extends Fragment {
     MyChallengeAdapter mAdapter;
     MyChallengeViewModel viewmodel;
     private static final String TAG = "FragmentMyChallenge";
+    LinearLayout body;
 
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_my_challenge, container, false);
         viewmodel = new ViewModelProvider(getActivity()).get(MyChallengeViewModel.class);
 
+        body = view.findViewById(R.id.body);
+        Button btn_enter = view.findViewById(R.id.btn_enter);
+        btn_enter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), CreateChallengeActivity.class));
+            }
+        });
+
         viewmodel.get_my_challenge_list().observe(getActivity(), new Observer<List<MyChallengeModel.My_challenge>>() {
             @Override
             public void onChanged(List<MyChallengeModel.My_challenge> my_challengeList) {
-                Log.d(TAG, "onChanged: "+my_challengeList.size());
                 recyclerView = view.findViewById(R.id.recyclerView);
                 recyclerView.setHasFixedSize(true);
                 mLayoutManager = new LinearLayoutManager(getContext());
                 recyclerView.setLayoutManager(mLayoutManager);
-                mAdapter = new MyChallengeAdapter(my_challengeList);
-                recyclerView.setAdapter(mAdapter);
+                if(my_challengeList != null){
+                    mAdapter = new MyChallengeAdapter(my_challengeList);
+                    recyclerView.setAdapter(mAdapter);
+                    body.setVisibility(View.GONE);
+                }else{
+                    body.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -57,13 +75,17 @@ public class FragmentMyChallenge extends Fragment {
                 viewmodel.get_my_challenge_list().observe(getActivity(), new Observer<List<MyChallengeModel.My_challenge>>() {
                     @Override
                     public void onChanged(List<MyChallengeModel.My_challenge> my_challengeList) {
-                        Log.d(TAG, "onChanged: "+my_challengeList.size());
                         recyclerView = view.findViewById(R.id.recyclerView);
                         recyclerView.setHasFixedSize(true);
                         mLayoutManager = new LinearLayoutManager(getContext());
                         recyclerView.setLayoutManager(mLayoutManager);
-                        mAdapter = new MyChallengeAdapter(my_challengeList);
-                        recyclerView.setAdapter(mAdapter);
+                        if(my_challengeList != null){
+                            mAdapter = new MyChallengeAdapter(my_challengeList);
+                            recyclerView.setAdapter(mAdapter);
+                            body.setVisibility(View.GONE);
+                        }else{
+                            body.setVisibility(View.VISIBLE);
+                        }
                     }
                 });
 
@@ -83,12 +105,16 @@ public class FragmentMyChallenge extends Fragment {
         viewmodel.get_my_challenge_list().observe(getActivity(), new Observer<List<MyChallengeModel.My_challenge>>() {
             @Override
             public void onChanged(List<MyChallengeModel.My_challenge> my_challengeList) {
-                Log.d(TAG, "onChanged: "+my_challengeList.size());
                 recyclerView.setHasFixedSize(true);
                 mLayoutManager = new LinearLayoutManager(getContext());
                 recyclerView.setLayoutManager(mLayoutManager);
-                mAdapter = new MyChallengeAdapter(my_challengeList);
-                recyclerView.setAdapter(mAdapter);
+                if(my_challengeList != null){
+                    mAdapter = new MyChallengeAdapter(my_challengeList);
+                    recyclerView.setAdapter(mAdapter);
+                    body.setVisibility(View.GONE);
+                }else{
+                    body.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
